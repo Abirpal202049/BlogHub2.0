@@ -9,15 +9,17 @@ import PostReaction from "./PostReaction ";
 
 const PostList = () => {
   const posts = useSelector(allPosts);
+  // const rev_post = posts.slice().reverse()
+  // console.log(rev_post);
 
-  // console.log(posts);
+  // ? https://bobbyhadz.com/blog/react-reverse-array#:~:text=Call%20the%20slice()%20method,the%20result%20in%20a%20variable. 
   return (
     <>
       <h1 className="max-w-[1200px] container mx-auto text-[43px] font-bold">
         Posts
       </h1>
       <div className="flex max-w-[1200px] flex-wrap container mx-auto">
-        {posts.map((post, index) => {
+        {posts.slice().reverse().map((post, index) => {
           return (
             <div
               key={index}

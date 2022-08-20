@@ -11,9 +11,6 @@ const initialState = [
     userId: 3,
     reaction: {
       like: 0,
-      // total : function(){
-      //   return this.like + this.dislike
-      // },
       dislike: 0,
     },
   },
@@ -24,9 +21,6 @@ const initialState = [
     date: sub(new Date(), { minutes: 5 }).toISOString(),
     reaction: {
       like: 0,
-      // total : function(){
-      //   return (this.like + this.dislike) || 12
-      // },
       dislike: 0,
     },
   },
@@ -36,22 +30,16 @@ export const postSlice = createSlice({
   name: "post",
   initialState,
   reducers: {
-    // postAdded(state, action) {
-    //   state.push(action.payload);
-    // },
-
     printState: (state) => {
       console.log("This is the current state : ", state);
     },
 
     likeAndDislike: (state, action) => {
-      console.log("ACCCCCTION",action);
       const { value, postId } = action.payload;
 
       const currentpost = state.find((post) => post.id === postId);
-      
+
       if (currentpost.reaction) {
-        console.log("Post", currentpost);
         currentpost.reaction[value]++;
       }
     },
