@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import { postAdded, fetchPost } from "./postSlice";
+import Axios from "axios";
 
 import { allUserArray } from "../user/userSlice";
 
@@ -14,9 +15,19 @@ const Addform = () => {
 
   const dispatch = useDispatch();
 
-  const onSavePost = (e) => {
+  const onSavePost = async (e) => {
     e.preventDefault();
     if (title && body && userId) {
+      const data = await Axios.post(
+        "https://i8c8ztg5.directus.app/items/blog",
+        {
+          "status": "published",
+          title: title,
+          content: body,
+        }
+      );
+
+      console.log("REQUEST DATA", data);
       dispatch(postAdded(title, body, Number(userId)));
       setUserId("");
       setTitle("");
@@ -24,15 +35,12 @@ const Addform = () => {
     }
   };
 
-
-
   // const getDatafromBlog = async () => {
   //   const data = await fetch("https://i8c8ztg5.directus.app/items/blog");
   //   const res = await data.json();
   //   console.log("Blog Data  : ", res);
   // };
   // getDatafromBlog()
-  
 
   return (
     <div className="max-w-[1200px] container mx-auto flex flex-col m-3 ">

@@ -9,6 +9,7 @@ import PostReaction from "./PostReaction ";
 
 const PostList = () => {
   const posts = useSelector(allPosts);
+  
   // const rev_post = posts.slice().reverse()
   // console.log(rev_post);
 
