@@ -1,30 +1,21 @@
-import { createSlice, nanoid } from "@reduxjs/toolkit";
+import { createSlice, nanoid, createAsyncThunk } from "@reduxjs/toolkit";
 import { sub } from "date-fns";
 
-const initialState = [
-  {
-    id: nanoid(),
-    title: "Learning moe on Redux Toolkit",
-    content:
-      "Sonny, and Pedro coder are the 2 teachers from where i get to know about Redux",
-    date: sub(new Date(), { minutes: 10 }).toISOString(),
-    userId: 3,
-    reaction: {
-      like: 0,
-      dislike: 0,
-    },
-  },
-  {
-    id: nanoid(),
-    title: "Slices....",
-    content: "Slices are the important part of the Redux",
-    date: sub(new Date(), { minutes: 5 }).toISOString(),
-    reaction: {
-      like: 0,
-      dislike: 0,
-    },
-  },
-];
+
+const initialState = {
+  posts : [],
+  status : "ideal"
+};
+
+
+export const fetchPost = createAsyncThunk(
+  'fetchPosts',
+  async () => {
+    const res = await fetch("https://i8c8ztg5.directus.app/items/blog");
+    const data = await res.json();
+    return data.data
+  }
+)
 
 export const postSlice = createSlice({
   name: "post",
@@ -37,7 +28,7 @@ export const postSlice = createSlice({
     likeAndDislike: (state, action) => {
       const { value, postId } = action.payload;
 
-      const currentpost = state.find((post) => post.id === postId);
+      const currentpost = state.posts.find((post) => post.id === postId);
 
       if (currentpost.reaction) {
         currentpost.reaction[value]++;
@@ -46,7 +37,7 @@ export const postSlice = createSlice({
 
     postAdded: {
       reducer(state, action) {
-        state.push(action.payload);
+        state.posts.push(action.payload);
       },
 
       prepare(title, content, userId) {
@@ -66,9 +57,26 @@ export const postSlice = createSlice({
       },
     },
   },
+
+
+  // pending | fulfilled | rejected
+  extraReducers : (builder) => {
+    builder
+      .addCase(fetchPost.pending , (state, action) => {
+        state.status = 'loading...'
+      })
+      .addCase(fetchPost.fulfilled , (state, action) => {
+        state.status = "confirmed.."
+        state.posts = action.payload
+        console.log("State from Confirm : ", state);
+        console.log("Action from Confirm : ", action);
+      })
+  }
 });
 
-export const allPosts = (state) => state.posts;
+export const allPosts = (state) => state.posts.posts;
+export const postStatus = (state) => state.posts.status;
+
 
 export const { postAdded, likeAndDislike } = postSlice.actions;
 

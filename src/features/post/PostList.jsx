@@ -1,6 +1,6 @@
-import React from "react";
-import { useSelector } from "react-redux";
-import { allPosts } from "./postSlice";
+import React, { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { allPosts, fetchPost } from "./postSlice";
 import PostAuthor from "./PostAuthorDisplay";
 import PostTimeDisplay from "./PostTimeDisplay";
 import PostReaction from "./PostReaction ";
@@ -11,6 +11,13 @@ const PostList = () => {
   const posts = useSelector(allPosts);
   // const rev_post = posts.slice().reverse()
   // console.log(rev_post);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(fetchPost())
+  }, [])
+  
 
   // ? https://bobbyhadz.com/blog/react-reverse-array#:~:text=Call%20the%20slice()%20method,the%20result%20in%20a%20variable. 
   return (
@@ -29,14 +36,14 @@ const PostList = () => {
                 {post.title}
               </div>
               <p className="font-mono mt-5 m-10">{post.content}</p>
-              <p className="text-[14px] flex justify-between text-slate-700 font-bold text-right">
+              {/* <p className="text-[14px] flex justify-between text-slate-700 font-bold text-right">
                 <PostTimeDisplay timestamp={post.date} />
 
                 <PostAuthor userUniqueId={post.userId} />
               </p>
               <div className="flex justify-between mt-3 px-10">
                 <PostReaction reactionObj={post.reaction} postId={post.id} />
-              </div>
+              </div> */}
             </div>
           );
         })}

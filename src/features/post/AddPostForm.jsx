@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import { postAdded } from "./postSlice";
+import { postAdded, fetchPost } from "./postSlice";
 
 import { allUserArray } from "../user/userSlice";
 
@@ -18,13 +18,21 @@ const Addform = () => {
     e.preventDefault();
     if (title && body && userId) {
       dispatch(postAdded(title, body, Number(userId)));
-      setUserId("")
+      setUserId("");
       setTitle("");
       setBody("");
     }
   };
 
-  // console.log("User : ", userId);
+
+
+  // const getDatafromBlog = async () => {
+  //   const data = await fetch("https://i8c8ztg5.directus.app/items/blog");
+  //   const res = await data.json();
+  //   console.log("Blog Data  : ", res);
+  // };
+  // getDatafromBlog()
+  
 
   return (
     <div className="max-w-[1200px] container mx-auto flex flex-col m-3 ">
